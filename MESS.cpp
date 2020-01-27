@@ -1,6 +1,6 @@
 /*
 AUTHOR :SUMIT KUMAR VERMA(21) SHAILESH SHEKHAR(22)
-  LATEST COMMIT: 20 JAN 2019 
+  LATEST COMMIT: 27 JAN 2019 
 */
 #include<bits/stdc++.h>
 #include<fstream>
@@ -44,6 +44,35 @@ void MESS::set_record(std::string in1,std::string in2)
       else{
             memcpy(lname,in2.c_str(),sizeof(lname)-1);
       }
+}
+void MESS::disp_single_student()
+{  system("cls");
+	 int r_no,flag=0;
+	 cout<<"Enter Your Room Number ::";cin>>r_no;
+	 ifstream infile;
+	 infile.open("MESS.txt",ios::in);
+	 MESS stu;
+	 infile.read((char *)&stu,sizeof(stu));
+	 while(!infile.eof())
+	 {
+	 	 if(stu.room_no==r_no)
+	 	 {
+	 	 	 flag=1;
+	 	 	 cout<<"\n\nHello "<<stu.fname<<" "<<stu.lname;
+	 	 	 cout<<"\nRoom Number::"<<stu.room_no;
+	 	 	 cout<<"\nScholar Number::"<<stu.scholar_no;
+	 	 	 cout<<"\n---------------------------------\n";
+	 	 	 cout<<"Balance Left in your Account::"<<stu.balance;
+	 	 	 cout<<"\n----------------------------------\n";
+	 	 	 break;
+		  }
+		  infile.read((char *)&stu,sizeof(stu));
+	 }
+if(flag==0)
+{
+	 cout<<"\nSorry No Records found\n";
+	 }	 
+	 
 }
 void MESS::add_student()
 {
@@ -174,7 +203,10 @@ void menu()
      }
      else if(choice==2)
      {
-            //student details option
+            //student details option'
+            MESS stu;
+            stu.disp_single_student();
+            
      }
      else if(choice==3)
      {
@@ -231,13 +263,14 @@ int main()
 {
      
  //menu_admin();
-  //MESS test;
-
+ // MESS test;
+//menu();
   //test.add_student();
 // test.disp_details();
  //test.take_attendance();
- int x;
- cin>>x;
+ //int x;
+ //cin>>x;
+ //test.disp_single_student();
 
   return 0;
 
