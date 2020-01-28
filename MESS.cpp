@@ -6,6 +6,7 @@ AUTHOR :SUMIT KUMAR VERMA(21) SHAILESH SHEKHAR(22)
 #include<fstream>
 #include<stdlib.h>
 #include<ctime>
+#include<Windows.h>
 using namespace std;
 void menu_admin();
 /*MESS CLASS DEC*/
@@ -274,13 +275,14 @@ int checkadmin()
 	 cout<<"\nEnter Password::";cin>>pwd;
 	 if(name==uname && pass==pwd)
 	 { 
-	    cout<<"Logged in successfully\n\n";
-		system("pause");
+	    cout<<"\n\nLogged in successfully\n\n";
+		Sleep(1000);
 	 	 return 1;
 	 }
 	 else{
 	 	 cout<<"\nEither username or password is incorrect\n\n";
-	 	 system("pause");
+	 	 cout<<"Exiting in 3..2...1";
+	 	 Sleep(1000);
 	 	 return 0;
 	 }
 	 return 0;
@@ -294,6 +296,8 @@ void menu()
 	 do{
 	 
     system("cls");
+    system("color 0D");
+   
     int choice;
      
      cout<<"**************************************************************************************\n";
