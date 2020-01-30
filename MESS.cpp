@@ -1,6 +1,6 @@
 /*
 AUTHOR :SUMIT KUMAR VERMA(21) SHAILESH SHEKHAR(22)
-  LATEST COMMIT: 29 JAN 2019 
+  LATEST COMMIT: 30 JAN 2019 
 */
 #include<bits/stdc++.h>
 #include<fstream>
@@ -10,6 +10,107 @@ AUTHOR :SUMIT KUMAR VERMA(21) SHAILESH SHEKHAR(22)
 using namespace std;
 void menu_admin();
 /*MESS CLASS DEC*/
+//feedback class
+class feedback{
+	 public:
+	 
+	 int r_no;
+	 char comment[100];
+	 void add_feed();
+	 void disp_feed();
+	 
+};
+void feedback::add_feed()
+{
+	system("cls");
+	feedback feed;
+	ofstream outfile;
+	outfile.open("feedback.txt",ios::app|ios::binary);
+	int ch,r_n;
+
+	cout<<"\nGive feedback using::\n";
+	cout<<"\n1.USING ROOM NUMBER";
+	cout<<"\n2.USING ANONYMITY\n";
+	cout<<"\n\n------------------\n";
+	cout<<"Enter Choice::";cin>>ch;
+	system("cls");
+	if(ch==1)
+	{
+		 cout<<"Enter Room Number::";cin>>r_n;
+	}
+	else if(ch==2){
+		 r_n=0;
+	}
+	char feed_b[100];
+
+	feed.r_no=r_n;
+		cin.ignore();
+	cout<<"\nEnter Feedback in less than 100 character::\n";
+	
+	cin.getline(feed_b,100);
+	strcpy(feed.comment,feed_b);
+//	cout<<feed.comment;
+	outfile.write((char *)&feed,sizeof(feed));
+	outfile.close();
+	cout<<"\nThank you for the feedback\n";
+
+	Sleep(1000);
+
+
+	
+}
+void feedback::disp_feed(){  
+ system("cls");
+	 int feed_id=0;
+	 feedback feed;
+	 ifstream infile;
+	 infile.open("feedback.txt",ios::in|ios::binary);
+	 
+	 
+	 infile.read((char *)&feed,sizeof(feed));
+	 while(!infile.eof())
+	 {
+	 	 cout<<"\n\nFeedBack No. #"<<feed_id;
+	 	 
+	 	 if(feed.r_no==0)
+	 	 {
+	 	 	 cout<<"\nFeedback type:: Anonymous\n";
+	 	 	 cout<<feed.comment;
+	 	 	
+		  }
+		  if(feed.r_no!=0)
+		  {
+		  	 cout<<"\nFeedback Type:: Room no "<<feed.r_no;
+		  	 cout<<endl;
+		  	 cout<<feed.comment;
+		  }
+		  
+		  feed_id++;
+		  infile.read((char *)&feed,sizeof(feed));
+	 }
+	 cout<<"\n\n";
+	 system("pause");
+}
+void feed_menu()
+{
+	 system("cls");
+	 cout<<"\n1.Add feedback\n";
+	 cout<<"2.See feedbacks\n";
+	 int choice;
+	 cout<<"\n\nEnter choice::";cin>>choice;
+	 feedback f;
+	 if(choice==1)
+	 {
+	 	 f.add_feed();
+	 }
+	 if(choice==2){
+	 	 f.disp_feed();
+	 }
+	 
+	 //feedback f;
+	 //f.add_feed();
+	 //f.disp_feed();
+}
 class MESS{
      public:
   char fname[50]={};
@@ -17,7 +118,9 @@ class MESS{
   int scholar_no;
   float balance;
   int room_no;
-  MESS(){};
+  int attendance;
+  int egg_taken;
+  MESS(){attendance=0;egg_taken=0;}
   ~MESS(){};
         void set_record(std::string in1,std::string in2);
         void add_student();
@@ -113,7 +216,7 @@ void menu_details::see_menu()
 {
 	 system("cls");
 	 menu_details test1,test2;
-	 	vector<string> days={"DAILY","Monday","Tuesday","wednesday","Thrusday","Friday","Saturday","Sunday"};
+	 	vector<string> days={"DAILY","Monday","Tuesday","wednesday","Thursday","Friday","Saturday","Sunday"};
 	 	time_t now=time(0);
 
 	 tm *itm=localtime(&now);
@@ -172,6 +275,8 @@ void MESS::disp_single_student()
 	 	 	 cout<<"\n\nHello "<<stu.fname<<" "<<stu.lname;
 	 	 	 cout<<"\nRoom Number::"<<stu.room_no;
 	 	 	 cout<<"\nScholar Number::"<<stu.scholar_no;
+	 	 	 cout<<"\nNumber of days attended::"<<stu.attendance;
+	 	 	 cout<<"\nEggs count::"<<stu.egg_taken<<" Cost at Rs 7 per piece ="<<7*stu.egg_taken;
 	 	 	 cout<<"\n---------------------------------\n";
 	 	 	 cout<<"Balance Left in your Account::"<<stu.balance;
 	 	 	 cout<<"\n----------------------------------\n";
@@ -231,6 +336,8 @@ void MESS::disp_details()
           cout<<"\nScholar Number ::"<<stu.scholar_no;
           cout<<"\nRoom Number ::"<<stu.room_no;
           cout<<"\nBalance Left::"<<stu.balance;
+          cout<<"\nStudent Attendance::"<<stu.attendance;
+          cout<<"\nEggs count::"<<stu.egg_taken;
 
           infile.read((char *)&stu,sizeof(stu));
     }
@@ -241,8 +348,9 @@ system("pause");
 void MESS::take_attendance()
 {
 	system("cls");
-int room;
+int room,e_c;
 cout<<"ENTER YOUR ROOM NUMBER ::";cin>>room;
+cout<<"\nENTER NUMBER OF EGGS TAKEN::";cin>>e_c;
 MESS mess_obj;
 ofstream fout("temp.txt",ios::out);
 ifstream fin("MESS.txt",ios::in);
@@ -251,7 +359,9 @@ while(!fin.eof())
 {
 	 if(room==mess_obj.room_no)
 	 {
-	 	 mess_obj.balance=mess_obj.balance-50;
+	 	 mess_obj.balance=mess_obj.balance-50-7*e_c;
+	 	 mess_obj.attendance=mess_obj.attendance+1;
+	 	 mess_obj.egg_taken=mess_obj.egg_taken+e_c;
 	 }
 	 fout.write((char *)&mess_obj,sizeof(mess_obj));
 	 fin.read((char *)&mess_obj,sizeof(mess_obj));
@@ -296,7 +406,7 @@ void menu()
 	 do{
 	 
     system("cls");
-    system("color 0D");
+    
    
     int choice;
      
@@ -313,7 +423,8 @@ void menu()
      cout<<"               1.ADMIN LOGIN\n";
      cout<<"               2.STUDENT DETAILS\n";
      cout<<"               3.TODAY'S MENU\n";
-     cout<<"               4.EXIT\n\n";
+     cout<<"               4.FEEDBACK MENU\n";
+     cout<<"               5.EXIT\n\n";
      cout<<"ENTER ANY CHOICE::";
      cin>>choice;
      if(choice==1){
@@ -338,8 +449,12 @@ void menu()
      }
      else if(choice==4)
      {
-          exit(0);
+        feed_menu();
      }
+     else if(choice==5)
+     {
+     	 exit(0);
+	 }
      else{
           cout<<"INVALID CHOICE";
      }
@@ -357,6 +472,7 @@ void menu_admin()
 	 cout<<"\n\n                  1.ADD STUDENT\n";
 	 cout<<"\n                  2.DISPLAY STUDENT DETAILS\n\n";
 	 cout<<"                  3.TAKE ATTENDANCE\n";
+	
 	 cout<<"\n                  4.MAIN MENU\n";
 	 cout<<"\n                  5.EXIT\n";
 	 cout<<"--------------------------------------------------------\n";
@@ -381,6 +497,7 @@ void menu_admin()
 	 {
 	 	 tempo.take_attendance();
 	 }
+
 	 else if(choice==4)
 	 {
 	 	 menu();
@@ -394,8 +511,6 @@ void menu_admin()
 	 }
 }while(true);
 }
-
-
 
 
 
